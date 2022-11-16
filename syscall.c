@@ -46,8 +46,8 @@ pid_t getpid_syscall(void)
 		*       or a symbolic constant. */
 		: "0"(SYSCALL_MASK | 0x0000)
 #elif defined(__aarch64__)
-    // found on APPLES M1 (and probably M2, other successors on ARM based) 
-    // architecture (no matter if linux or apple system)
+		// found on APPLES M1 (and probably M2, other successors on ARM based) 
+		// architecture (no matter if linux or apple system)
 		  "mov x8,%1\n\t"
 		  "svc #0x00\n\t"
 		  "mov %0, x0"
