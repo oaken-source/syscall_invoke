@@ -11,9 +11,12 @@
 #if defined(__linux__)
 #	include <asm/unistd.h>
 #	define SYSCALL_MASK 0x0
-#elif defined(__APPLE__)
+#elif defined(__APPLE__) && (defined(__x86_64__) || defined(__i386__))
 #	include <sys/syscall.h>
 #	define SYSCALL_MASK 0x02000000
+#elif defined(__APPLE__) && defined(__aarch64__)
+#	include <sys/syscall.h>
+#	define SYSCALL_MASK 0x0
 #endif
 
 pid_t getpid_syscall(void)
@@ -48,9 +51,9 @@ pid_t getpid_syscall(void)
 #elif defined(__aarch64__)
 		// found on APPLES M1 (and probably M2, other successors on ARM based) 
 		// architecture (no matter if linux or apple system)
-		  "mov x8,%1\n\t"
-		  "svc #0x00\n\t"
-		  "mov %0, x0"
+		  "mov x16,%1\n"
+		  "svc #0x00\n"
+		  "mov %w0, w0"
 		: "=r"(res)
 		/* TODO: replace 0x0000 below with the syscall number
 		*       or a symbolic constant. */
